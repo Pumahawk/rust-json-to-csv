@@ -1,0 +1,10 @@
+[package]
+name = "json-to-csv"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+json = { git = "https://github.com/Pumahawk/json_rust.git", rev="395d60968380b1824d7a6e47f156d1b3cddf5573" }
