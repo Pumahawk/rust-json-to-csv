@@ -5,7 +5,7 @@ use json::TypeJson;
 
 fn main() {
     let config = config().expect("Invalid arguments");
-    pring_header(&config);
+    print_header(&config);
 
     let input = io::stdin().lock().lines();
     for line in input {
@@ -59,15 +59,19 @@ fn config() -> Result<Config> {
     })
 }
 
-fn pring_header(config: &Config) {
+fn print_header(config: &Config) {
     if config.header {
-        let header = config.columns
-            .iter()
-            .map(|el|&el.0)
-            .map(|el|el.as_str())
-            .collect::<Vec<_>>()
-            .join(",");
-        println!("{}", header);
+        println!("{}", get_header(config));
     }
+
+}
+
+fn get_header(config: &Config) -> String {
+    config.columns
+        .iter()
+        .map(|el|&el.0)
+        .map(|el|el.as_str())
+        .collect::<Vec<_>>()
+        .join(",")
 }
 
