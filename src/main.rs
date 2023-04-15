@@ -1,11 +1,32 @@
 use std::env;
 use std::io;
+use std::io::BufRead;
+use json::TypeJson;
 
 fn main() {
     let config = config().expect("Invalid arguments");
     pring_header(&config);
 
-    let input = io::stdin();
+    let input = io::stdin().lock().lines();
+    for line in input {
+        let mut columns = Vec::new();
+        let line = line.expect("impossibile read line");
+        let mut chars = line.chars();
+        let object = json::parser(&mut chars).expect("Unable to read object from line").into();
+        let reader = json::ReaderJson::new(&object);
+        for (_, path) in &config.columns {
+            let txt = match reader.path(path).json() {
+                TypeJson::Object(_) => String::from("[object_json]"),
+                TypeJson::List(_) => String::from("[list_json]"),
+                TypeJson::Text(txt) => txt.to_string(),
+                TypeJson::Number(n) => n.to_string(),
+                TypeJson::Null => String::from(""),
+            };
+            columns.push(txt);
+        }
+        let columns = columns.join(",");
+        println!("{}", columns);
+    }
 }
 
 type Result<T> = std::result::Result<T, &'static str>;
