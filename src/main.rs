@@ -59,20 +59,18 @@ fn get_header(config: &Config) -> String {
         .join(",")
 }
 
-fn map_row<'a>(config: &'a Config, line: String) -> String {
-    let mut columns = Vec::new();
+fn map_row(config: &Config, line: String) -> String {
     let mut chars = line.chars();
     let object = json::parser(&mut chars).expect("Unable to read object from line").into();
     let reader = json::ReaderJson::new(&object);
-    for (_, path) in &config.columns {
-        let txt = match reader.path(path).json() {
+    config.columns.iter().map(|(_, path)| path)
+        .map(|path| match reader.path(path).json() {
             TypeJson::Object(_) => String::from("[object_json]"),
             TypeJson::List(_) => String::from("[list_json]"),
             TypeJson::Text(txt) => txt.to_string(),
             TypeJson::Number(n) => n.to_string(),
             TypeJson::Null => String::from(""),
-        };
-        columns.push(txt);
-    }
-    columns.join(",")
+        })
+        .collect::<Vec<_>>()
+        .join(",")
 }
