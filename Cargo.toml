@@ -7,4 +7,4 @@ edition = "2021"
 
 [dependencies]
 
-json = { git = "https://github.com/Pumahawk/json_rust.git", rev="395d60968380b1824d7a6e47f156d1b3cddf5573" }
+json = { git = "https://github.com/Pumahawk/json_rust.git", branch="master" }
