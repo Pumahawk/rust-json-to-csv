@@ -10,6 +10,7 @@ fn main() {
     io::stdin().lock().lines()
         .map(|r|r.expect("Unable to read line."))
         .map(|line| map_row_to_object(&config, line))
+        .flat_map(|obj| object_flat_map(&config, obj))
         .map(|line| map_object_to_row(&config, line))
         .for_each(|line| println!("{}", line));
 }
@@ -72,6 +73,15 @@ fn map_row_to_object(_: &Config, line: String) -> TypeJson {
     let mut chars = line.chars();
     json::parser(&mut chars).expect("Unable to read object from line").into()
 }
+
+fn object_flat_map(config: &Config, object: TypeJson) -> impl Iterator<Item=TypeJson> {
+    let mut ret: Box<dyn Iterator<Item=TypeJson>> = Box::new(std::iter::once(object)); 
+    for path in config.flat_path.iter() {
+        let path = String::from(path.as_str());
+        ret = Box::new(ret.flat_map(move |obj|if let TypeJson::List(list) = json::traverse(obj, &path).unwrap() {list.into_iter()} else {json::array().into_iter()}));
+    }
+    ret
+} 
 
 fn map_object_to_row(config: &Config, object: TypeJson) -> String {
     let reader = json::ReaderJson::new(&object);
