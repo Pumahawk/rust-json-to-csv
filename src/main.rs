@@ -19,6 +19,7 @@ struct Config {
     header: bool,
     string_escape: bool,
     columns: Vec<(String, String)>, // name, path
+    flat_path: Vec<String>,
 }
 
 fn config() -> Result<Config> {
@@ -26,6 +27,7 @@ fn config() -> Result<Config> {
     let mut header = true;
     let mut escape = true;
     let mut columns = Vec::new();
+    let mut flat_path = Vec::new();
     let mut args = env::args().skip(1);
     while let Some(arg) = args.next() {
         arg_counter += 1;
@@ -33,6 +35,7 @@ fn config() -> Result<Config> {
         match &argtmp {
             &"--no-head" => header = false,
             &"--no-escape" => escape = false,
+            &"--flat" => flat_path.push(args.next().ok_or("Not found flat path")?),
             &"-c" => columns.push((
                 args.next().ok_or("Not found key argument")?,
                 args.next().ok_or("Not found path argument")?
@@ -44,6 +47,7 @@ fn config() -> Result<Config> {
         header,
         columns,
         string_escape: escape,
+        flat_path: flat_path.into_iter().rev().collect(),
     })
 }
 
