@@ -78,7 +78,7 @@ fn object_flat_map(config: &Config, object: TypeJson) -> impl Iterator<Item=Type
     let mut ret: Box<dyn Iterator<Item=TypeJson>> = Box::new(std::iter::once(object)); 
     for path in config.flat_path.iter() {
         let path = String::from(path.as_str());
-        ret = Box::new(ret.flat_map(move |obj|if let TypeJson::List(list) = json::traverse(obj, &path).unwrap() {list.into_iter()} else {json::array().into_iter()}));
+        ret = Box::new(ret.flat_map(move |obj|if let TypeJson::List(list) = obj.traverse(&path).unwrap() {list.into_iter()} else {json::array().into_iter()}));
     }
     ret
 } 
