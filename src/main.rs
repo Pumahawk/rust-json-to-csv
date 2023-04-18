@@ -80,6 +80,7 @@ fn map_row(config: &Config, line: String) -> String {
                     TypeJson::List(_) => String::from("[list_json]"),
                     TypeJson::Text(txt) => txt.to_string(),
                     TypeJson::Number(n) => n.to_string(),
+                    TypeJson::Boolean(b) => b.to_string(),
                     TypeJson::Null => String::from(""),
                 }
             }
