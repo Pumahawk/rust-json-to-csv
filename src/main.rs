@@ -9,7 +9,8 @@ fn main() {
 
     io::stdin().lock().lines()
         .map(|r|r.expect("Unable to read line."))
-        .map(|line| map_row(&config, line))
+        .map(|line| map_row_to_object(&config, line))
+        .map(|line| map_object_to_row(&config, line))
         .for_each(|line| println!("{}", line));
 }
 
@@ -67,9 +68,12 @@ fn get_header(config: &Config) -> String {
         .join(",")
 }
 
-fn map_row(config: &Config, line: String) -> String {
+fn map_row_to_object(_: &Config, line: String) -> TypeJson {
     let mut chars = line.chars();
-    let object = json::parser(&mut chars).expect("Unable to read object from line").into();
+    json::parser(&mut chars).expect("Unable to read object from line").into()
+}
+
+fn map_object_to_row(config: &Config, object: TypeJson) -> String {
     let reader = json::ReaderJson::new(&object);
     config.columns
         .iter()

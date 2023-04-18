@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 
 json = { git = "https://github.com/Pumahawk/json_rust.git", branch="master" }
+
+[patch."https://github.com/Pumahawk/json_rust.git"]
+json = { path = "../json" }
