@@ -5,7 +5,7 @@ version = 3
 [[package]]
 name = "json"
 version = "0.1.0"
-source = "git+https://github.com/Pumahawk/json_rust.git?branch=master#478fe1e4e7a26e573a1b4ae9a171db53a600da35"
+source = "git+https://github.com/Pumahawk/json_rust.git?branch=master#7efdcd62a3ebe17aefd37eb22beafc280435e765"
 
 [[package]]
 name = "json-to-csv"

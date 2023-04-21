@@ -7,15 +7,23 @@ fn main() {
     let config = config().expect("Invalid arguments");
     print_header(&config);
 
+    let mut stdout = io::stdout().lock();
+    
     io::stdin().lock().lines()
         .map(|r|r.expect("Unable to read line."))
         .map(|line| map_row_to_object(&config, line))
         .flat_map(|obj| object_flat_map(&config, obj))
         .map(|line| map_object_to_row(&config, line))
-        .for_each(|line| println!("{}", line));
+        .for_each(move |line| print_row(&mut stdout, line));
 }
 
 type Result<T> = std::result::Result<T, &'static str>;
+
+fn print_row(out: &mut impl std::io::Write, line: String) {
+    out.write(line.as_bytes()).expect("Unable to write in stdout");
+    out.write(&"\n".as_bytes()).expect("Unable to write in stdout");
+}
+
 
 struct Config {
     header: bool,
