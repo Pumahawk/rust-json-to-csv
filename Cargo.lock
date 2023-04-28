@@ -3,9 +3,17 @@
 version = 3
 
 [[package]]
+name = "automa"
+version = "0.1.0"
+source = "git+https://github.com/Pumahawk/rust-automa.git#94ae2f539f92db9e9f7157fd971aa06fdaf76edc"
+
+[[package]]
 name = "json"
 version = "0.1.0"
-source = "git+https://github.com/Pumahawk/json_rust.git?branch=master#99e3b9320a2fd71cf86f1b0d26926fcc6fd2845b"
+source = "git+https://github.com/Pumahawk/json_rust.git?branch=master#80d249c5ec9219aafc619dea8ab261500ff8e4ad"
+dependencies = [
+ "automa",
+]
 
 [[package]]
 name = "json-to-csv"
